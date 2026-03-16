@@ -11,6 +11,12 @@ terraform {
 
 provider "aws" {
   region = "us-east-2"
+  default_tags {
+    tags = {
+      Project  = "vprofile"
+      Deployed = "terraform"
+    }
+  }
 }
 
 resource "aws_default_vpc" "default" {
@@ -117,3 +123,49 @@ resource "aws_key_pair" "vprofile_prod_key" {
   key_name   = "vprofile-PROD-KEY"
   public_key = var.vprofile_prod_public_key
 }
+
+
+# Name: vprofile-db01
+# AMI: Amazon Linux 2023
+# Type: t2.micro
+# SSH-Key-PAIR
+# SG: vprofile-BACKEND-SG
+# Networking: Auto-assign public IP
+# USER DATA: mysql.sh
+# TESTING: 
+#   - systemctl status mariadb
+#   - mysql -u admin -p accounts
+#   - show tables;
+
+# Name: vprofile-mc01
+# AMI: Amazon Linux 2023
+# Type: t2.micro
+# SSH-Key-PAIR
+# SG: vprofile-BACKEND-SG
+# Networking: Auto-assign public IP
+# USER DATA: memcache.sh
+# TESTING:
+#   - systemctl status memcached
+
+# Name: vprofile-rmq01
+# AMI: Amazon Linux 2023
+# Type: t2.micro
+# SSH-Key-PAIR
+# SG: vprofile-BACKEND-SG
+# Networking: Auto-assign public IP
+# USER DATA: rabbitmq.sh
+# TESTING:
+#   - systemctl status rabbitmq-server
+
+# Name: vprofile-app01
+# AMI: Ubuntu Server 24.04 LTS (HVM), SSD Volume Type
+# Type: t2.micro
+# SSH-Key-PAIR
+# SG: vprofile-APP-SG
+# Networking: Auto-assign public IP
+# USER DATA: tomcat_ubuntu.sh
+
+
+# TODO: TAG Instances, Volumes
+# TODO: Output all servers URLs
+# TODO: Testing you can ssh to all instances
