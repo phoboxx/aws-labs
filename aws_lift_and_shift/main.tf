@@ -1,8 +1,5 @@
 
 
-# Create SSH key-pair 
-# name: vprofile-PROD-KEY
-
 terraform {
   required_providers {
     aws = {
@@ -112,4 +109,11 @@ module "vprofile_backend_sg" {
   egress_cidr_blocks = ["0.0.0.0/0"]
   egress_rules       = ["all-all"]
 
+}
+
+# Create SSH key-pair 
+# name: vprofile-PROD-KEY
+resource "aws_key_pair" "vprofile_prod_key" {
+  key_name   = "vprofile-PROD-KEY"
+  public_key = var.vprofile_prod_public_key
 }
