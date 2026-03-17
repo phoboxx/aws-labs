@@ -185,11 +185,6 @@ module "ec2_instance_vprofile_mc01" {
   monitoring                  = true
   subnet_id                   = aws_default_subnet.default_az1.id
   user_data                   = file("${path.module}/user_data/memcache.sh")
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
 }
 
 
@@ -214,11 +209,6 @@ module "ec2_instance_vprofile_rmq01" {
   monitoring                  = true
   subnet_id                   = aws_default_subnet.default_az1.id
   user_data                   = file("${path.module}/user_data/rabbitmq.sh")
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
 }
 
 
@@ -229,7 +219,7 @@ module "ec2_instance_vprofile_rmq01" {
 # SG: vprofile-APP-SG
 # Networking: Auto-assign public IP
 # USER DATA: tomcat_ubuntu.sh
-module "ec2_instance_vprofile_vprofile_app01" {
+module "ec2_instance_vprofile_app01" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
   name                        = "vprofile-app01"
@@ -241,15 +231,4 @@ module "ec2_instance_vprofile_vprofile_app01" {
   monitoring                  = true
   subnet_id                   = aws_default_subnet.default_az1.id
   user_data                   = file("${path.module}/user_data/tomcat_ubuntu.sh")
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
 }
-
-
-# TODO: TAG Instances, Volumes
-# TODO: Output all servers URLs
-# TODO: Testing you can ssh to all instances
-# TODO: Use templatefile instead of a file to avoid hardcoding secrets
