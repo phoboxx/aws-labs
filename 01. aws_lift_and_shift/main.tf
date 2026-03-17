@@ -136,7 +136,7 @@ resource "aws_key_pair" "vprofile_prod_key" {
 #   - systemctl status mariadb
 #   - mysql -u admin -p accounts
 #   - show tables;
-module "ec2_instance" {
+module "ec2_instance_vprofile_db01" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
   name                        = "vprofile-db01"
@@ -173,6 +173,25 @@ resource "aws_default_subnet" "default_az1" {
 # USER DATA: memcache.sh
 # TESTING:
 #   - systemctl status memcached
+module "ec2_instance_vprofile_mc01" {
+  source = "terraform-aws-modules/ec2-instance/aws"
+
+  name                        = "vprofile-mc01"
+  ami                         = var.amazon_linux_2023_ami_id
+  instance_type               = "t3.micro"
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.vprofile_prod_key.key_name
+  vpc_security_group_ids      = [module.vprofile_backend_sg.security_group_id]
+  monitoring                  = true
+  subnet_id                   = aws_default_subnet.default_az1.id
+  user_data                   = file("${path.module}/user_data/memcache.sh")
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
+}
+
 
 # Name: vprofile-rmq01
 # AMI: Amazon Linux 2023
