@@ -136,6 +136,33 @@ resource "aws_key_pair" "vprofile_prod_key" {
 #   - systemctl status mariadb
 #   - mysql -u admin -p accounts
 #   - show tables;
+module "ec2_instance" {
+  source = "terraform-aws-modules/ec2-instance/aws"
+
+  name                        = "vprofile-db01"
+  ami                         = var.amazon_linux_2023_ami_id
+  instance_type               = "t3.micro"
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.vprofile_prod_key.key_name
+  vpc_security_group_ids      = [module.vprofile_backend_sg.security_group_id]
+  monitoring                  = true
+  subnet_id                   = aws_default_subnet.default_az1.id
+  user_data                   = templatefile("${path.module}/user_data/mysql.sh.tftpl", { mysql_db_password = var.mysql_db_password })
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
+}
+
+resource "aws_default_subnet" "default_az1" {
+  availability_zone = "us-east-2a"
+
+  tags = {
+    Name = "Default subnet for us-east-2a"
+  }
+}
+
 
 # Name: vprofile-mc01
 # AMI: Amazon Linux 2023
@@ -169,3 +196,4 @@ resource "aws_key_pair" "vprofile_prod_key" {
 # TODO: TAG Instances, Volumes
 # TODO: Output all servers URLs
 # TODO: Testing you can ssh to all instances
+# TODO: Use templatefile instead of a file to avoid hardcoding secrets
