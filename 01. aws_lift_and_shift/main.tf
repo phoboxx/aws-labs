@@ -229,6 +229,24 @@ module "ec2_instance_vprofile_rmq01" {
 # SG: vprofile-APP-SG
 # Networking: Auto-assign public IP
 # USER DATA: tomcat_ubuntu.sh
+module "ec2_instance_vprofile_vprofile_app01" {
+  source = "terraform-aws-modules/ec2-instance/aws"
+
+  name                        = "vprofile-app01"
+  ami                         = var.ubuntu_24_04_ami_id
+  instance_type               = "t3.micro"
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.vprofile_prod_key.key_name
+  vpc_security_group_ids      = [module.vprofile_app_sg.security_group_id]
+  monitoring                  = true
+  subnet_id                   = aws_default_subnet.default_az1.id
+  user_data                   = file("${path.module}/user_data/tomcat_ubuntu.sh")
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
+}
 
 
 # TODO: TAG Instances, Volumes

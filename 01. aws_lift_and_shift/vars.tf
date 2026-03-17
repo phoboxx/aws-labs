@@ -10,6 +10,11 @@ variable "amazon_linux_2023_ami_id" {
   default     = "ami-0b0b78dcacbab728f"
 }
 
+variable "ubuntu_24_04_ami_id" {
+  type        = string
+  description = "AMI ID for Ubuntu 24.04"
+  default     = "ami-07062e2a343acc423"
+}
 variable "mysql_db_password" {
   type        = string
   description = "MySQL db password for vprofile-db01"
