@@ -9,7 +9,8 @@ resource "aws_default_vpc" "default" {
 # Inbound rules: HTTP from IPV4 & IPV6
 # Inbound rules: HTTPS from IPV4 & IPV6
 module "vprofile_elb_sg" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.3.1"
 
   name        = "vprofile-ELB-SG"
   description = "Security Group for the vprofile load balancer"
@@ -28,7 +29,8 @@ module "vprofile_elb_sg" {
 # Inbound rules: 8080 from vprofile-ELB-SG
 # inbound rules: SSH from MY IP
 module "vprofile_app_sg" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.3.1"
 
   name        = "vprofile-APP-SG"
   description = "Security group for tomcat app server"
@@ -59,7 +61,8 @@ module "vprofile_app_sg" {
 # Inbound rules: SSH from MY IP
 # Inbound rules: Allow all traffic from itself
 module "vprofile_backend_sg" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.3.1"
 
   name        = "vprofile-BACKEND-SG"
   description = "Security group for mysql, memcache & rabbitmq allowed from tomcat app server"
@@ -116,7 +119,8 @@ resource "aws_key_pair" "vprofile_prod_key" {
 #   - mysql -u admin -p accounts
 #   - show tables;
 module "ec2_instance_vprofile_db01" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 6.3.0"
 
   name                        = "vprofile-db01"
   ami                         = var.amazon_linux_2023_ami_id
@@ -153,7 +157,8 @@ resource "aws_default_subnet" "default_az1" {
 # TESTING:
 #   - systemctl status memcached
 module "ec2_instance_vprofile_mc01" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 6.3.0"
 
   name                        = "vprofile-mc01"
   ami                         = var.amazon_linux_2023_ami_id
@@ -177,7 +182,8 @@ module "ec2_instance_vprofile_mc01" {
 # TESTING:
 #   - systemctl status rabbitmq-server
 module "ec2_instance_vprofile_rmq01" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 6.3.0"
 
   name                        = "vprofile-rmq01"
   ami                         = var.amazon_linux_2023_ami_id
@@ -199,7 +205,8 @@ module "ec2_instance_vprofile_rmq01" {
 # Networking: Auto-assign public IP
 # USER DATA: tomcat_ubuntu.sh
 module "ec2_instance_vprofile_app01" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 6.3.0"
 
   name                        = "vprofile-app01"
   ami                         = var.ubuntu_24_04_ami_id
