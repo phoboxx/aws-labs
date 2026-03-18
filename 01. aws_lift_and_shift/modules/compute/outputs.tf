@@ -37,3 +37,12 @@ output "ec2_instance_vprofile_app01_private_ip" {
   value       = module.ec2_instance_vprofile_app01.private_ip
   description = "Private IP address of vprofile-app01"
 }
+
+output "vpc_id" {
+  value       = aws_default_vpc.default.id
+  description = "VPC id where the ressources are provisioned"
+}
+
+output "vpc_region" {
+  value = data.aws_region.current.id
+}
