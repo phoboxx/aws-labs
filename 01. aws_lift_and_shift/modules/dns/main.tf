@@ -1,7 +1,9 @@
 # Create a Route 53 hosted zone (Private hosted zone)
 
 module "zone" {
-  source       = "terraform-aws-modules/route53/aws"
+  source  = "terraform-aws-modules/route53/aws"
+  version = "~> 6.4.0"
+
   name         = var.hosted_zone_name
   private_zone = true
   records = {
