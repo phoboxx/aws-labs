@@ -1,14 +1,5 @@
 # Create a Route 53 hosted zone (Private hosted zone)
-terraform {
-  required_version = ">= 1.14"
 
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 6.36.0"
-    }
-  }
-}
 module "zone" {
   source       = "terraform-aws-modules/route53/aws"
   name         = var.hosted_zone_name
