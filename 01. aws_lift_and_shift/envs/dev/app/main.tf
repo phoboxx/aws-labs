@@ -9,14 +9,15 @@ provider "aws" {
 }
 
 module "compute" {
-  source                   = "./modules/compute/"
+  source                   = "../../../modules/compute/"
   vprofile_prod_public_key = var.vprofile_prod_public_key
   mysql_db_password        = var.mysql_db_password
+  s3_iam_role_name         = module.s3_iam_role.role_name
 }
 
 
 module "dns" {
-  source = "./modules/dns"
+  source = "../../../modules/dns"
   private_dns_records = [{
     dns_name   = "db01",
     private_ip = module.compute.ec2_instance_vprofile_db01_private_ip
@@ -37,4 +38,8 @@ module "dns" {
   vpc_id           = module.compute.vpc_id
   vpc_region       = module.compute.vpc_region
   hosted_zone_name = var.hosted_zone_name
+}
+
+module "s3_iam_role" {
+  source = "../../../modules/s3_iam_role"
 }

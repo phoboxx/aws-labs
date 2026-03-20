@@ -20,3 +20,8 @@ variable "mysql_db_password" {
   description = "MySQL db password for vprofile-db01"
   sensitive   = true
 }
+
+variable "s3_iam_role_name" {
+  type        = string
+  description = "Role ID to give access to app01 to assume s3 role"
+}

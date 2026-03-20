@@ -217,4 +217,5 @@ module "ec2_instance_vprofile_app01" {
   monitoring                  = true
   subnet_id                   = aws_default_subnet.default_az1.id
   user_data                   = file("${path.module}/user_data/tomcat_ubuntu.sh")
+  iam_instance_profile        = var.s3_iam_role_name
 }
