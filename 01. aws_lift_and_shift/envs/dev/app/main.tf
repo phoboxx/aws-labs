@@ -1,11 +1,3 @@
-# Procedure once deployed
-# aws s3 cp s3://artifact-bucket-aosidjfaosdijfqewklksd/vprofile-v2.war /tmp/
-# systemctl daemon-reload
-# systemctl stop tomcat10
-# rm -rf /var/lib/tomcat10/webapps/ROOT
-# cp /tmp/vprofile-v2.war /var/lib/tomcat10/webapps/
-# Wait till it extracts
-# systemctl start tomcat10
 
 provider "aws" {
   region = "us-east-2"
