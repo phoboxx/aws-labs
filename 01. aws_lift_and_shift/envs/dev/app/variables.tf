@@ -14,3 +14,8 @@ variable "hosted_zone_name" {
   type        = string
   description = "Hosted zone name where the records are going to be held"
 }
+
+variable "acm_certificate_arn" {
+  type        = string
+  description = "ARN of the public certificate on ACM"
+}

@@ -46,3 +46,7 @@ output "vpc_id" {
 output "vpc_region" {
   value = data.aws_region.current.id
 }
+
+output "load_balancer_url" {
+  value = module.alb.dns_name
+}

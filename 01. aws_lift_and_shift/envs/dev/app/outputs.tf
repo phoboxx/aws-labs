@@ -37,3 +37,7 @@ output "ec2_instance_vprofile_app01_private_ip" {
   value       = module.compute.ec2_instance_vprofile_app01_private_ip
   description = "Private IP address of vprofile-app01"
 }
+
+output "load_balancer_url" {
+  value = module.compute.load_balancer_url
+}

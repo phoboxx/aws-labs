@@ -219,3 +219,63 @@ module "ec2_instance_vprofile_app01" {
   user_data                   = file("${path.module}/user_data/tomcat_ubuntu.sh")
   iam_instance_profile        = var.s3_iam_role_name
 }
+
+
+
+# Target Group: vprofile-las-tg
+# Protocol: HTTP - 8080
+# Health check: 8080
+# target: vprofile-app01: 8080
+# Load balancer
+# Port: 80 - 443 --> vprofile-las-tg
+# Name: vprofile-las-elb
+# Select all VPC AZ
+# SG: vprofile-ELB-SG
+# Select Certificate ACM
+
+module "alb" {
+  source = "terraform-aws-modules/alb/aws"
+
+  name                       = "vprofile-las-elb"
+  vpc_id                     = aws_default_vpc.default.id
+  subnets                    = data.aws_subnets.default.ids
+  enable_deletion_protection = false
+
+  security_groups = [module.vprofile_elb_sg.security_group_id]
+
+  target_groups = {
+    vprofile-las-tg = {
+      protocol    = "HTTP"
+      port        = 8080
+      target_type = "instance"
+      target_id   = module.ec2_instance_vprofile_app01.id
+      health_check = {
+        enabled             = true
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        timeout             = 3
+        interval            = 30
+        path                = "/"
+        matcher             = "200"
+      }
+    }
+  }
+
+  listeners = {
+    http = {
+      port     = 80
+      protocol = "HTTP"
+      forward = {
+        target_group_key = "vprofile-las-tg"
+      }
+    },
+    https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = var.acm_certificate_arn
+      forward = {
+        target_group_key = "vprofile-las-tg"
+      }
+    }
+  }
+}

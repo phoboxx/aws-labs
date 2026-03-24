@@ -25,3 +25,8 @@ variable "s3_iam_role_name" {
   type        = string
   description = "Role ID to give access to app01 to assume s3 role"
 }
+
+variable "acm_certificate_arn" {
+  type        = string
+  description = "ARN of the ACM certificate for HTTPS listener"
+}
